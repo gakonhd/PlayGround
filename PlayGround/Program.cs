@@ -10,8 +10,8 @@ namespace PlayGround
     {
         static void Main(string[] args)
         {
-            int? myInt = null;
-            Console.WriteLine($"my nullable Int {myInt}");
+            //int? myInt = null;
+            //Console.WriteLine($"my nullable Int {myInt}");
 
             //string? myString = null; --> not supported yet
             //string myString = null;
@@ -22,6 +22,7 @@ namespace PlayGround
 
             //TestClass? testNull = null; //not supported yet
             //testNull.PrintSomething(DateTime.Now.ToString());
+
 
             Console.Read();
         }

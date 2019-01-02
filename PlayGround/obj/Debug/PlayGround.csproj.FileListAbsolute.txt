@@ -1,7 +1,0 @@
-D:\Study\PlayGround\PlayGround\PlayGround\bin\Debug\PlayGround.exe.config
-D:\Study\PlayGround\PlayGround\PlayGround\bin\Debug\PlayGround.exe
-D:\Study\PlayGround\PlayGround\PlayGround\bin\Debug\PlayGround.pdb
-D:\Study\PlayGround\PlayGround\PlayGround\obj\Debug\PlayGround.csprojAssemblyReference.cache
-D:\Study\PlayGround\PlayGround\PlayGround\obj\Debug\PlayGround.csproj.CoreCompileInputs.cache
-D:\Study\PlayGround\PlayGround\PlayGround\obj\Debug\PlayGround.exe
-D:\Study\PlayGround\PlayGround\PlayGround\obj\Debug\PlayGround.pdb

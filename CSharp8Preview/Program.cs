@@ -1,15 +1,19 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace CSharp8Preview
 {
     class Program
     {
-        static async System.Threading.Tasks.Task Main(string[] args)
+        static async Task Main(string[] args)
         {
             var check = true;
             while (check)
             {
+                Console.Clear();
                 Console.WriteLine("Things to demo");
                 Console.WriteLine("1 - First Preview");
                 Console.WriteLine("2 - Second Preview");
@@ -17,9 +21,49 @@ namespace CSharp8Preview
                 Console.WriteLine();
                 if(key.Key == ConsoleKey.D1)
                 {
-                    HandleD1();
+                    await HandleD1();
+                }else if (key.Key == ConsoleKey.D2)
+                {
+                    HandleD2();
+                }
+                else
+                {
+                    check = false;
                 }
             }
+            
+        }
+
+        private static void HandleD2()
+        {
+            Random r = new Random();
+            var collection = new List<IVehicle?>();
+            for (var i = 0; i < 10; i++)
+            {
+                var idx = r.Next(1, 3);
+                if (idx % 2 == 0)
+                {
+                    collection.Add(new Car());
+                }
+                else
+                {
+                    collection.Add(new Truck());
+                }
+            }
+            collection.Add(null);
+            
+            var pr2 = new PreviewTwoWithPatterns();
+            foreach(var v in collection)
+            {
+                //pr2.GetTruckDetailsOld(v);
+                Console.WriteLine(pr2.GetVehicleDetails(v));
+                Console.WriteLine("---------------------------------------");
+            }
+            Console.ReadLine();
+        }
+
+        private static async Task HandleD1()
+        {
             const string fastenal = "FASTENAL";
             string myNullString = null;
             //Console.WriteLine($"Get something from null string {myNullString[0]}");
@@ -44,11 +88,11 @@ namespace CSharp8Preview
             Console.WriteLine($"Result is {tc.SyncPrint(fastenal)}");
             Console.WriteLine("---------------------------------------------");
             Console.WriteLine();
-            
+
             //Calling the Sync Print W Yield
             Console.WriteLine("Starting with the current thread");
             Console.WriteLine($"Thread id {Thread.CurrentThread.ManagedThreadId}");
-            foreach(var c in tc.YieldSyncPrint(fastenal))
+            foreach (var c in tc.YieldSyncPrint(fastenal))
             {
                 Console.WriteLine($"Current string is {c} - Thread id is {Thread.CurrentThread.ManagedThreadId}");
             }
@@ -69,7 +113,7 @@ namespace CSharp8Preview
             Console.WriteLine($"Thread id {Thread.CurrentThread.ManagedThreadId}");
             var res = await tc.AsyncEnumPrint(fastenal);
             Console.WriteLine($"Finished with the async enum print - Thread id is {Thread.CurrentThread.ManagedThreadId}");
-            foreach(var c in res)
+            foreach (var c in res)
             {
                 Console.WriteLine($"Result is {c} - Thread id is {Thread.CurrentThread.ManagedThreadId}");
             }
@@ -89,11 +133,6 @@ namespace CSharp8Preview
             Console.WriteLine();
 
             Console.Read();
-        }
-
-        private static void HandleD1()
-        {
-
         }
     }
 }

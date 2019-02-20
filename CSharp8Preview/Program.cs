@@ -7,18 +7,35 @@ namespace CSharp8Preview
     {
         static async System.Threading.Tasks.Task Main(string[] args)
         {
+            var check = true;
+            while (check)
+            {
+                Console.WriteLine("Things to demo");
+                Console.WriteLine("1 - First Preview");
+                Console.WriteLine("2 - Second Preview");
+                var key = Console.ReadKey();
+                Console.WriteLine();
+                if(key.Key == ConsoleKey.D1)
+                {
+                    HandleD1();
+                }
+            }
             const string fastenal = "FASTENAL";
-            //string myNullString = null;
+            string myNullString = null;
             //Console.WriteLine($"Get something from null string {myNullString[0]}");
 
-            //string? myNullableString = null; // make string nullable
-            //Console.WriteLine($"Get something from nullable string {myNullableString[0]}");
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' context.
+            string? myNullableString = null; // make string nullable
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' context.
+            Console.WriteLine($"Get something from nullable string {myNullableString?[0]}");
 
-            //TestClass test = null;
-            //test?.PrintSomething("Hello WOrld");
+            TestClass test = null;
+            test?.PrintSomething("Hello WOrld");
 
-            //TestClass? testNull = null; // make all reference type nullable now
-            //testNull?.PrintSomething("Hello WOrld");
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' context.
+            TestClass? testNull = null; // make all reference type nullable now
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' context.
+            testNull?.PrintSomething("Hello WOrld");
 
             var tc = new TestClass();
             //Calling the Sync Print
@@ -62,16 +79,21 @@ namespace CSharp8Preview
             //Calling the Async Print
             Console.WriteLine("Starting with the current thread");
             Console.WriteLine($"Thread id {Thread.CurrentThread.ManagedThreadId}");
-            var res2 = tc.AsyncWithYield(fastenal);
-            Console.WriteLine($"Finished with the async enum print with yield - Thread id is {Thread.CurrentThread.ManagedThreadId}");
-            await foreach (var c in res2)
-            {
-                Console.WriteLine($"Result is {c} - Thread id is {Thread.CurrentThread.ManagedThreadId}");
-            }
+            //var res2 = tc.AsyncWithYield(fastenal);
+            //Console.WriteLine($"Finished with the async enum print with yield - Thread id is {Thread.CurrentThread.ManagedThreadId}");
+            //await foreach (var c in res2)
+            //{
+            //    Console.WriteLine($"Result is {c} - Thread id is {Thread.CurrentThread.ManagedThreadId}");
+            //}
             Console.WriteLine("---------------------------------------------");
             Console.WriteLine();
 
             Console.Read();
+        }
+
+        private static void HandleD1()
+        {
+
         }
     }
 }

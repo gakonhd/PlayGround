@@ -84,17 +84,17 @@ namespace CSharp8Preview
         /*
          * The name says it all
          */
-        public async IAsyncEnumerable<string> AsyncWithYield(string s)
-        {
-            Console.WriteLine("AsyncWithYield is called");
-            var item = handle(s);
+        //public async IAsyncEnumerable<string> AsyncWithYield(string s)
+        //{
+        //    Console.WriteLine("AsyncWithYield is called");
+        //    var item = handle(s);
 
-            foreach (var c in item.Item1)
-            {
-                await Task.Delay(1234);
-                yield return item.Item2.Append(c).ToString();
-            }
-        }
+        //    foreach (var c in item.Item1)
+        //    {
+        //        await Task.Delay(1234);
+        //        yield return item.Item2.Append(c).ToString();
+        //    }
+        //}
 
         private Tuple<char[], StringBuilder> handle(string s)
         {

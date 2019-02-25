@@ -45,6 +45,8 @@ namespace CSharp8Preview
                 {
                     collection.Add(new Car());
                 }
+
+
                 else
                 {
                     collection.Add(new Truck());

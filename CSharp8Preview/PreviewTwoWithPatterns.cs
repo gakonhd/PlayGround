@@ -13,7 +13,8 @@ namespace CSharp8Preview
                 Truck t when t.Type == 2 => $"Truck Id: {t.SerialNumber} \r\nSmall Truck can carry only 1500 lbs",
                 //Truck t => $"Truck Id {t.Id} \r\nTruck Name: {t.Name}",
                 //Truck (var x, var y, var z) => $"Truck Id {x} \r\nTruck Name: {y}\r\nTruck type: {z}", //wrong position
-                Truck (var x, var y, var z) => $"Truck Id {x} \r\nTruck Name: {z}\r\nTruck type: {y}",
+                //Truck (var x, var y, var z) => $"Truck Id {x} \r\nTruck Name: {z}\r\nTruck type: {y}",
+                Truck (var (x,y,z)) => $"Truck Id {x} \r\nTruck Name: {z}\r\nTruck type: {y}",
                 { } => string.Empty, //not null
                 _ => "Null Vehicle" //null case only
             };
@@ -31,6 +32,8 @@ namespace CSharp8Preview
                 };
             }
 
+
+
             return truckDetails;
         }
 
@@ -43,7 +46,7 @@ namespace CSharp8Preview
                     Console.WriteLine($"Truck Id: {t.SerialNumber} \r\nSmall Truck can carry only 1500 lbs");
                     break;
                 case Truck t:
-                    Console.WriteLine($"Truck Id {t.SerialNumber} \r\nTruck Name: {t.Id}");
+                    Console.WriteLine($"Truck Id {t.SerialNumber} \r\nTruck Name: {t.Name}");
                     break;
                 default:
                     Console.WriteLine("No truck to display");
@@ -54,9 +57,17 @@ namespace CSharp8Preview
         public string GetTruckDetailsNewV3(IVehicle tr) => tr switch
         {
             Truck t when t.Type == 2 => $"Truck Id: {t.SerialNumber} \r\nSmall Truck can carry only 1500 lbs",
-            Truck t => $"Truck Id {t.SerialNumber} \r\nTruck Name: {t.Id}",
+            Truck t => $"Truck Id {t.SerialNumber} \r\nTruck Name: {t.Name}",
             _ => "No truck to display"
         };
+    }
+
+    public class SuperVehicle : IVehicle
+    {
+        public SuperVehicle()
+        {
+
+        }
     }
 
     public class Truck : IVehicle
@@ -65,20 +76,24 @@ namespace CSharp8Preview
         public Truck()
         {
             SerialNumber = CreateUniqueIds();
-            Id = Guid.NewGuid().ToString();
+            Name = Guid.NewGuid().ToString();
             Type = new Random().Next(1, 3);
         }
 
-        public void Deconstruct(out int id, out int type, out string? name)
-        {
-            id = SerialNumber;
-            type = Type;
-            name = Id;
-        }
+        //C# 7.0 Deconstructor
+        //public void Deconstruct(out int serialNumber, out int type, out string? name)
+        //{
+        //    serialNumber = SerialNumber;
+        //    type = Type;
+        //    name = Id;
+        //}
+
+        public void Deconstruct(out (int serialNumber, int type, string? name) truck)
+        => truck = (SerialNumber, Type, Name);
 
         public int SerialNumber { get; }
         public int Type { get; set; }
-        public string? Id { get; set; }
+        public string? Name { get; set; }
         public enum TruckType
         {
             BigTruck = 1,

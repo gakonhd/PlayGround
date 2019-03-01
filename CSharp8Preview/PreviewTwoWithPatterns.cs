@@ -10,20 +10,21 @@ namespace CSharp8Preview
             var truckDetails = tr switch
             {
                 //Truck t => $"Truck Id {t.Id} \r\nTruck Name: {t.Name}", // error out since it already handled
-                Truck t when t.Type == 2 => $"Truck Id: {t.SerialNumber} \r\nSmall Truck can carry only 1500 lbs",
+                //Truck t when t.Type == 2 => $"Truck Id: {t.SerialNumber} \r\nSmall Truck can carry only 1500 lbs", //oldway
+                Truck {Type : 2 } t => $"Truck Id: {t.SerialNumber} \r\nSmall Truck can carry only 1500 lbs",
                 //Truck t => $"Truck Id {t.Id} \r\nTruck Name: {t.Name}",
                 //Truck (var x, var y, var z) => $"Truck Id {x} \r\nTruck Name: {y}\r\nTruck type: {z}", //wrong position
                 //Truck (var x, var y, var z) => $"Truck Id {x} \r\nTruck Name: {z}\r\nTruck type: {y}",
-                Truck (var (x,y,z)) => $"Truck Id {x} \r\nTruck Name: {z}\r\nTruck type: {y}",
+                Truck(var (x,y,z)) => $"Truck Id {x} \r\nTruck Name: {z}\r\nTruck type: {y}",
                 { } => string.Empty, //not null
-                _ => "Null Vehicle" //null case only
+                _ => "NullVehicle" //null case only
             };
 
             if (string.IsNullOrEmpty(truckDetails))
             {
                 truckDetails = tr switch
                 {
-                    Car { SeatCapacity : 4} c=> $"Compact Car has {c.SeatCapacity} seats. Affordable",
+                    Car { SeatCapacity : 4} c => $"Compact Car has {c.SeatCapacity} seats. Affordable",
                     Car c when c.SeatCapacity < 4 => $"Car has {c.SeatCapacity} seats. Small Car",
                     Car { SeatCapacity: var S} => $"Car has {S} seats. Large Car",
                     { } => "N/A",
@@ -32,8 +33,35 @@ namespace CSharp8Preview
                 };
             }
 
+            if (truckDetails.Equals("NullVehicle") || truckDetails.Equals("N/A"))
+            {
+                truckDetails = tr switch
+                {
+                    SuperVehicle (var truck, var (car1, _)) => $"SuperVehicle details: {truck.t1?.Name ?? "Lorem"}{truck.t2.Name ?? "Posem"}\r\nCapacity{car1.SeatCapacity}",
+                    _ => "N/A even for superCar"
+                };
+            }
 
+            return truckDetails;
+        }
 
+        public string GetVehicleDetailsConsolidated(IVehicle tr)
+        {
+            var truckDetails = tr switch
+            {
+                //Truck t => $"Truck Id {t.Id} \r\nTruck Name: {t.Name}", // error out since it already handled
+                //Truck t when t.Type == 2 => $"Truck Id: {t.SerialNumber} \r\nSmall Truck can carry only 1500 lbs", //oldway
+                Truck { Type: 2 } t => $"Truck Id: {t.SerialNumber} \r\nSmall Truck can carry only 1500 lbs",
+                //Truck t => $"Truck Id {t.Id} \r\nTruck Name: {t.Name}",
+                //Truck (var x, var y, var z) => $"Truck Id {x} \r\nTruck Name: {y}\r\nTruck type: {z}", //wrong position
+                //Truck (var x, var y, var z) => $"Truck Id {x} \r\nTruck Name: {z}\r\nTruck type: {y}",
+                Truck(var (x, y, z)) => $"Truck Id {x} \r\nTruck Name: {z}\r\nTruck type: {y}",
+                Car { SeatCapacity: 4 } c => $"Compact Car has {c.SeatCapacity} seats. Affordable",
+                Car c when c.SeatCapacity < 4 => $"Car has {c.SeatCapacity} seats. Small Car",
+                Car { SeatCapacity: var S } => $"Car has {S} seats. Large Car",
+                SuperVehicle(var truck, var (car1, _)) => $"SuperVehicle details: {truck.t1?.Name ?? "Lorem"}{truck.t2.Name ?? "Posem"}\r\nCapacity{car1.SeatCapacity}",
+                _ => "N/A even for superCar"
+            };
             return truckDetails;
         }
 
@@ -64,10 +92,15 @@ namespace CSharp8Preview
 
     public class SuperVehicle : IVehicle
     {
-        public SuperVehicle()
-        {
-
-        }
+        public (Truck t1, Truck t2) TruckPart { get; }
+        public (Car c1, Car c2) CarPart { get; }
+        public SuperVehicle((Truck t1, Truck t2) truck, (Car c1, Car c2) car) => (TruckPart, CarPart) = (truck, car);
+        public void Deconstruct(out (Truck t1, Truck t2) truckPart, out (Car c1, Car c2) carPart)
+        //{
+        //    truckPart = TruckPart;
+        //    carPart = CarPart;
+        //}
+        => (truckPart, carPart) = (TruckPart, CarPart);
     }
 
     public class Truck : IVehicle
@@ -81,15 +114,15 @@ namespace CSharp8Preview
         }
 
         //C# 7.0 Deconstructor
-        //public void Deconstruct(out int serialNumber, out int type, out string? name)
-        //{
-        //    serialNumber = SerialNumber;
-        //    type = Type;
-        //    name = Id;
-        //}
+        public void Deconstruct(out int serialNumber, out int type, out string? name)
+        {
+            serialNumber = SerialNumber;
+            type = Type;
+            name = Name;
+        }
 
-        public void Deconstruct(out (int serialNumber, int type, string? name) truck)
-        => truck = (SerialNumber, Type, Name);
+        public void Deconstruct(out (int serialNumber, int type, string? name) truckTuple)
+        => truckTuple = (SerialNumber, Type, Name);
 
         public int SerialNumber { get; }
         public int Type { get; set; }

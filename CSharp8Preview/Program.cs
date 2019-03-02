@@ -55,7 +55,11 @@ namespace CSharp8Preview
                     collection.Add(new Truck());
                 }
             }
+            
+            //adding null case
             collection.Add(null);
+
+            //adding a null truck
             Truck nullTruck = null;
             collection.Add(nullTruck);
 
@@ -63,8 +67,8 @@ namespace CSharp8Preview
             foreach (var v in collection)
             {
                 //pr2.GetTruckDetailsOld(v);
-                //Console.WriteLine(pr2.GetVehicleDetails(v));
-                Console.WriteLine(pr2.GetVehicleDetailsConsolidated(v));
+                Console.WriteLine(pr2.GetVehicleDetails(v));
+                //Console.WriteLine(pr2.GetVehicleDetailsConsolidated(v)); //same thing but more consolidation 
                 Console.WriteLine("---------------------------------------");
             }
             Console.ReadLine();
@@ -92,10 +96,10 @@ namespace CSharp8Preview
 
                 var key = Console.ReadKey();
                 Console.WriteLine();
-                
 
                 if (key.Key == ConsoleKey.D1 || key.Key == ConsoleKey.NumPad1)
                 {
+                    Console.Clear();
                     string? myNullableString = null; // make string nullable
                     Console.WriteLine("string? myNullableString = null; ");
                     Console.WriteLine("Console.WriteLine($\"Get something from nullable string {myNullableString?[0]}\")");
@@ -103,6 +107,7 @@ namespace CSharp8Preview
                 }
                 else if (key.Key == ConsoleKey.D2 || key.Key == ConsoleKey.NumPad2)
                 {
+                    Console.Clear();
                     TestClass test = null;
                     test?.PrintSomething("Hello WOrld");
 
@@ -112,6 +117,7 @@ namespace CSharp8Preview
                 }
                 else if (key.Key == ConsoleKey.D3 || key.Key == ConsoleKey.NumPad3)
                 {
+                    Console.Clear();
                     //Calling the Sync Print
                     Console.WriteLine("Starting with the current thread");
                     Console.WriteLine($"Thread id {Thread.CurrentThread.ManagedThreadId}");
@@ -121,6 +127,7 @@ namespace CSharp8Preview
                 }
                 else if (key.Key == ConsoleKey.D4 || key.Key == ConsoleKey.NumPad4)
                 {
+                    Console.Clear();
                     //Calling the Sync Print W Yield
                     Console.WriteLine("Starting with the current thread");
                     Console.WriteLine($"Thread id {Thread.CurrentThread.ManagedThreadId}");
@@ -134,6 +141,7 @@ namespace CSharp8Preview
                 }
                 else if (key.Key == ConsoleKey.D5 || key.Key == ConsoleKey.NumPad5)
                 {
+                    Console.Clear();
                     //Calling the Async Print
                     Console.WriteLine("Starting with the current thread");
                     Console.WriteLine($"Thread id {Thread.CurrentThread.ManagedThreadId}");
@@ -144,6 +152,7 @@ namespace CSharp8Preview
                 }
                 else if (key.Key == ConsoleKey.D6 || key.Key == ConsoleKey.NumPad6)
                 {
+                    Console.Clear();
                     //Calling the Async Print
                     Console.WriteLine("Starting with the current thread");
                     Console.WriteLine($"Thread id {Thread.CurrentThread.ManagedThreadId}");
@@ -158,6 +167,7 @@ namespace CSharp8Preview
                 }
                 else if (key.Key == ConsoleKey.D7 || key.Key == ConsoleKey.NumPad7)
                 {
+                    Console.Clear();
                     //Calling the Async Print
                     Console.WriteLine("Starting with the current thread");
                     Console.WriteLine($"Thread id {Thread.CurrentThread.ManagedThreadId}");
@@ -169,6 +179,37 @@ namespace CSharp8Preview
                     }
                     Console.WriteLine("---------------------------------------------");
                     Console.WriteLine();
+                }
+                else
+                {
+                    check = false;
+                }
+            }
+        }
+
+        private static void HandleD3()
+        {
+            var collection = new List<IVehicle?>();
+            var check = true;
+            var preview2 = new PreviewTwoWithPatterns();
+            while (check)
+            {
+                Console.Clear();
+                Console.WriteLine("Things to demo");
+                Console.WriteLine("1 - Truck");
+                Console.WriteLine("2 - Car");
+                Console.WriteLine("3 - Super Car");
+                Console.WriteLine("4 - Null");
+                Console.WriteLine("5 - Null Vehicle");
+                var key = Console.ReadKey();
+                Console.WriteLine();
+                if (key.Key == ConsoleKey.D1 || key.Key == ConsoleKey.NumPad1)
+                {
+                    preview2.GetVehicleDetails(new Truck());
+                }
+                else if (key.Key == ConsoleKey.D2 || key.Key == ConsoleKey.NumPad2)
+                {
+
                 }
                 else
                 {

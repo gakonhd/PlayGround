@@ -25,7 +25,7 @@ namespace CSharp8Preview
                 }
                 else if (key.Key == ConsoleKey.D2 || key.Key == ConsoleKey.NumPad2)
                 {
-                    HandleD2();
+                    HandleD3();
                 }
                 else
                 {
@@ -55,7 +55,7 @@ namespace CSharp8Preview
                     collection.Add(new Truck());
                 }
             }
-            
+
             //adding null case
             collection.Add(null);
 
@@ -195,21 +195,50 @@ namespace CSharp8Preview
             while (check)
             {
                 Console.Clear();
-                Console.WriteLine("Things to demo");
-                Console.WriteLine("1 - Truck");
-                Console.WriteLine("2 - Car");
+                Console.WriteLine("PATTERN DEMO");
+                Console.WriteLine("1 - Car");
+                Console.WriteLine("2 - Truck");
                 Console.WriteLine("3 - Super Car");
-                Console.WriteLine("4 - Null");
-                Console.WriteLine("5 - Null Vehicle");
+                Console.WriteLine("4 - Bicycle");
+                Console.WriteLine("5 - Null");
                 var key = Console.ReadKey();
-                Console.WriteLine();
                 if (key.Key == ConsoleKey.D1 || key.Key == ConsoleKey.NumPad1)
                 {
-                    preview2.GetVehicleDetails(new Truck());
+                    Console.WriteLine("New Car is created");
+                    var car = new Car();
+                    Console.WriteLine("Please enter seat capacity: ");
+                    var input = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(input))
+                    {
+                        int capacity;
+                        while (!int.TryParse(input, out capacity))
+                        {
+                            Console.WriteLine("This is not an int");
+                            input = Console.ReadLine();
+                        }
+                        car.SeatCapacity = capacity;
+                        Console.WriteLine(preview2.GetVehicleInfoClean(car));
+                        Console.ReadLine();
+                    }
                 }
                 else if (key.Key == ConsoleKey.D2 || key.Key == ConsoleKey.NumPad2)
                 {
-
+                    Console.WriteLine("New Truck is created");
+                    var truck = new Truck();
+                    Console.WriteLine("Please enter truck Type (1-3): ");
+                    var input = Console.ReadLine();
+                    if (!string.IsNullOrEmpty(input))
+                    {
+                        int type;
+                        while (!int.TryParse(input, out type) || type > 3)
+                        {
+                            Console.WriteLine("This is not a valid type");
+                            input = Console.ReadLine();
+                        }
+                        truck.Type = type;
+                        Console.WriteLine(preview2.GetVehicleInfoClean(truck));
+                        Console.ReadLine();
+                    }
                 }
                 else
                 {

@@ -15,15 +15,38 @@ namespace CSharp8Preview
             {
                 Console.Clear();
                 Console.WriteLine("Things to demo");
-                Console.WriteLine("1 - First Preview");
-                Console.WriteLine("2 - Second Preview");
+                Console.WriteLine("1 - Legacy Code with Null Reference Pointer Error");
+                Console.WriteLine("2 - New Code handle Null Reference");
+                Console.WriteLine("3 - First Preview");
+                Console.WriteLine("4 - Second Preview");
                 var key = Console.ReadKey();
                 Console.WriteLine();
+                MyClass myClass = new MyClass();
                 if (key.Key == ConsoleKey.D1 || key.Key == ConsoleKey.NumPad1)
+                {
+                    try
+                    {
+                        SomeMethod(myClass);
+                        _ = myClass.LegacyRandom.Next(1, 10);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        Console.ReadLine();
+                    }
+                }
+                else if (key.Key == ConsoleKey.D2 || key.Key == ConsoleKey.NumPad2)
+                {
+                    SomeMethod(myClass);
+                    var rdx = myClass.NewRandom?.Next(1, 10);
+                    Console.WriteLine($"NewRandom is called with return value {rdx?.ToString() ?? "[No value returned]"}");
+                    Console.ReadLine();
+                }
+                else if (key.Key == ConsoleKey.D3 || key.Key == ConsoleKey.NumPad3)
                 {
                     await HandleD1();
                 }
-                else if (key.Key == ConsoleKey.D2 || key.Key == ConsoleKey.NumPad2)
+                else if (key.Key == ConsoleKey.D4 || key.Key == ConsoleKey.NumPad4)
                 {
                     HandleD3();
                 }
@@ -34,44 +57,16 @@ namespace CSharp8Preview
             }
 
         }
-
-        private static void HandleD2()
+        public class MyClass
         {
-            Random r = new Random();
-            var collection = new List<IVehicle?>();
-            for (var i = 0; i < 10; i++)
-            {
-                var idx = r.Next(1, 4);
-                if (idx % 2 == 0)
-                {
-                    collection.Add(new Car());
-                }
-                else if (idx % 3 == 0)
-                {
-                    collection.Add(new SuperVehicle((new Truck(), new Truck()), (new Car(), new Car())));
-                }
-                else
-                {
-                    collection.Add(new Truck());
-                }
-            }
+            public Random? NewRandom = new Random();
+            public Random LegacyRandom = new Random();
+        }
 
-            //adding null case
-            collection.Add(null);
-
-            //adding a null truck
-            Truck nullTruck = null;
-            collection.Add(nullTruck);
-
-            var pr2 = new PreviewTwoWithPatterns();
-            foreach (var v in collection)
-            {
-                //pr2.GetTruckDetailsOld(v);
-                Console.WriteLine(pr2.GetVehicleDetails(v));
-                //Console.WriteLine(pr2.GetVehicleDetailsConsolidated(v)); //same thing but more consolidation 
-                Console.WriteLine("---------------------------------------");
-            }
-            Console.ReadLine();
+        static void SomeMethod(MyClass myClass)
+        {
+            myClass.LegacyRandom = null;
+            myClass.NewRandom = null;
         }
 
         private static async Task HandleD1()
@@ -189,7 +184,6 @@ namespace CSharp8Preview
 
         private static void HandleD3()
         {
-            var collection = new List<IVehicle?>();
             var check = true;
             var preview2 = new PreviewTwoWithPatterns();
             while (check)
@@ -240,11 +234,73 @@ namespace CSharp8Preview
                         Console.ReadLine();
                     }
                 }
+                else if (key.Key == ConsoleKey.D3|| key.Key == ConsoleKey.NumPad3)
+                {
+                    Console.WriteLine("New Super Vehicle is created");
+                    var rdn = new Random();
+                    var superVehicle = new SuperVehicle((new Truck(), new Truck()), (new Car() { SeatCapacity = rdn.Next(2, 10) }, new Car() { SeatCapacity = rdn.Next(2, 10) }));
+                    Console.WriteLine(preview2.GetVehicleInfoClean(superVehicle));
+                    Console.ReadLine();
+                }
+                else if (key.Key == ConsoleKey.D4 || key.Key == ConsoleKey.NumPad4)
+                {
+                    Console.WriteLine("New Bicycle is created");
+                    var bike = new Bicycle();
+                    Console.WriteLine(preview2.GetVehicleInfoClean(bike));
+                    Console.ReadLine();
+                }
+                else if (key.Key == ConsoleKey.D5 || key.Key == ConsoleKey.NumPad5)
+                {
+                    Console.WriteLine("New NULL is created");
+                    IVehicle? nullVehicle = default;
+                    Console.WriteLine(preview2.GetVehicleInfoClean(nullVehicle));
+                    Console.ReadLine();
+                }
                 else
                 {
                     check = false;
                 }
             }
         }
+
+        private static void HandleD2()
+        {
+            Random r = new Random();
+            var collection = new List<IVehicle?>();
+            for (var i = 0; i < 10; i++)
+            {
+                var idx = r.Next(1, 4);
+                if (idx % 2 == 0)
+                {
+                    collection.Add(new Car());
+                }
+                else if (idx % 3 == 0)
+                {
+                    collection.Add(new SuperVehicle((new Truck(), new Truck()), (new Car(), new Car())));
+                }
+                else
+                {
+                    collection.Add(new Truck());
+                }
+            }
+
+            //adding null case
+            collection.Add(null);
+
+            //adding a null truck
+            Truck nullTruck = null;
+            collection.Add(nullTruck);
+
+            var pr2 = new PreviewTwoWithPatterns();
+            foreach (var v in collection)
+            {
+                //pr2.GetTruckDetailsOld(v);
+                Console.WriteLine(pr2.GetVehicleDetails(v));
+                //Console.WriteLine(pr2.GetVehicleDetailsConsolidated(v)); //same thing but more consolidation 
+                Console.WriteLine("---------------------------------------");
+            }
+            Console.ReadLine();
+        }
+
     }
 }
